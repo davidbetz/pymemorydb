@@ -33,8 +33,8 @@ class TestApp(unittest.TestCase):
         agg = aggregate.Count(lambda _: _['title'][0])
         stats = agg.run([{ "title": "hello1" }, { "title": "frogs" }, { "title": "hello3" }])
         items = dict(stats)
-        self.assertEquals(items['h'], 2)
-        self.assertEquals(items['f'], 1)
+        self.assertEqual(items['h'], 2)
+        self.assertEqual(items['f'], 1)
         self.assertGreater(len(stats), 0)
         self.assertGreater(stats[0][1], 0)
 

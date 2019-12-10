@@ -169,7 +169,7 @@ class TestApp(unittest.TestCase):
 
         stats = self.provider.stats(scope, aggregate.Sum(lambda _: _['value']))
 
-        self.assertEquals(stats, 60)
+        self.assertEqual(stats, 60)
 
     def test_3_adds_and_query(self):
         scope = idgen.generate(__name__)
@@ -182,7 +182,7 @@ class TestApp(unittest.TestCase):
         self.provider.insert(scope, idgen.generate(__name__), item3)
 
         items = self.provider.query(scope, lambda _: _['title'].startswith('h'))
-        self.assertEquals(len(items), 2)
+        self.assertEqual(len(items), 2)
 
     def test_sample_wo_data(self):
         scope = idgen.generate(__name__)
@@ -190,7 +190,7 @@ class TestApp(unittest.TestCase):
 
         sample = self.provider.sample(scope, 10)
 
-        self.assertEquals(len(sample), 0)
+        self.assertEqual(len(sample), 0)
                 
     def test_20_adds_and_sample(self):
         scope = idgen.generate(__name__)
@@ -203,7 +203,7 @@ class TestApp(unittest.TestCase):
 
         sample = self.provider.sample(scope, 10)
 
-        self.assertEquals(len(sample), 10)
+        self.assertEqual(len(sample), 10)
                 
     def test_20_adds_and_sample_using_default_size(self):
         scope = idgen.generate(__name__)
@@ -216,7 +216,7 @@ class TestApp(unittest.TestCase):
 
         sample = self.provider.sample(scope)
 
-        self.assertEquals(len(sample), 10)
+        self.assertEqual(len(sample), 10)
 
     def test_add_updateall_get(self):
         scope = idgen.generate(__name__)
@@ -245,9 +245,9 @@ class TestApp(unittest.TestCase):
 
         items = self.provider.getAll(scope)
 
-        self.assertEquals(items[2]['text'], item3Copy['text'])
-        self.assertEquals(items[1]['text'], item2Copy['text'])
-        self.assertEquals(items[0]['text'], item1Copy['text'])
+        self.assertEqual(items[2]['text'], item3Copy['text'])
+        self.assertEqual(items[1]['text'], item2Copy['text'])
+        self.assertEqual(items[0]['text'], item1Copy['text'])
 
     def test_updateall_no_data_no_error_either(self):
         self.provider.updateAll([])
@@ -266,9 +266,9 @@ class TestApp(unittest.TestCase):
 
         try:
             stats = self.provider.stats(scope, '')
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(str(ex), 'aggregate must be of type Aggregate')
+            self.assertEqual(str(ex), 'aggregate must be of type Aggregate')
 
     def test_simple_add_and_get_error_bad_row_key_format(self):
         scope = idgen.generate(__name__)
@@ -278,16 +278,16 @@ class TestApp(unittest.TestCase):
 
         try:
             v = self.provider.get(scope, {})
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(str(ex), 'parameter after partition_key must be a row_key or an array of row keys')
+            self.assertEqual(str(ex), 'parameter after partition_key must be a row_key or an array of row keys')
 
     def test_get_error_404(self):
         try:
             v = self.provider.get('scope', 'row_key')
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(int(str(ex)), 404)
+            self.assertEqual(int(str(ex)), 404)
 
     def test_3_adds_and_query_error_bad_expression(self):
         scope = idgen.generate(__name__)
@@ -301,51 +301,51 @@ class TestApp(unittest.TestCase):
 
         try:
             items = self.provider.query(scope, 'asdf')
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(str(ex), 'expression function is required for query')
+            self.assertEqual(str(ex), 'expression function is required for query')
 
     def test_update_error_item_partition_key_missing(self):
         try:
             self.provider.update({})
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(str(ex), 'item.partition_key is required')
+            self.assertEqual(str(ex), 'item.partition_key is required')
 
     def test_update_error_item_row_key_missing(self):
         try:
             self.provider.update({ "partition_key": 1 })
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(str(ex), 'item.row_key is required')
+            self.assertEqual(str(ex), 'item.row_key is required')
 
     def test_update_error_404(self):
         try:
             self.provider.update({ "partition_key": 1, "row_key": 1 })
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(int(str(ex)), 404)
+            self.assertEqual(int(str(ex)), 404)
 
     def test_changeId_error_item_partition_key_missing(self):
         try:
             self.provider.changeId({}, 'asdf')
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(str(ex), 'item.partition_key is required')
+            self.assertEqual(str(ex), 'item.partition_key is required')
 
     def test_changeId_error_item_row_key_missing(self):
         try:
             self.provider.changeId({ "partition_key": 1 }, 'asdf')
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(str(ex), 'item.row_key is required')
+            self.assertEqual(str(ex), 'item.row_key is required')
 
     def test_changeId_error_404(self):
         try:
             self.provider.changeId({ "partition_key": 1, "row_key": 1 }, 2)
-            self.assertEquals(1 , 0)
+            self.assertEqual(1 , 0)
         except ValueError as ex:
-            self.assertEquals(int(str(ex)), 404)
+            self.assertEqual(int(str(ex)), 404)
     
 if __name__ == '__main__':
     unittest.main()
